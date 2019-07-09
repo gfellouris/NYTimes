@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Added a link to Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+        integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="style.css">
+
+    <title>NY Time search</title>
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1><span class="glyphicon glyphicon-list-alt"></span>NY Times Search</h1>
+    </div>
+
+    <div class="container well" id="container-form">
+        <div>
+            <span class="glyphicon glyphicon-th-list"></span><strong>Search Parameters:</strong>
+        </div>
+        <div class="column">
+            <div class="row">
+                <label for="usr">Search Term:</label>
+                <input id="searchTerm" type="text" class="form-control" id="usr">
+            </div>
+        </div>
+
+
+        <div class="column">
+            <div class="row">
+                <label for="usr">Number of records to retrieve:</label>
+                <input id="numRecords" type="text" class="form-control" id="usr">
+            </div>
+        </div>
+
+
+        <div class="column">
+            <div class="row">
+                <label for="usr">Start Year (Optional):</label>
+                <input id="startYear" type="text" class="form-control" id="usr">
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="row">
+                <label for="usr">End Year (Optional):</label>
+                <input id="endYear" type="text" class="form-control" id="usr">
+            </div>
+        </div>
+
+        <button id="btnSearch" type="button" class="btn btn-primary"><span
+                class="glyphicon glyphicon-search"></span>Search</button>
+        <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>Clear
+            Results</button>
+    </div>
+
+    <div class="container well" id="container-articles">
+        <span class="glyphicon glyphicon-th-large"></span>Top Articles
+        <div id="top-articles"></div>
+    </div>
+</body>
+
+<script>
+    $("#btnSearch").on("click", function () {
+
+        // storing our API URI for a random cat image
+        // var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&tag=dogs";
+        var titleSearch = $("#searchTerm").val();
+        var numRecords = $("#numRecords").val();
+        var startYear = $("#startYear").val();
+        var endYear = $("#endYear").val();
+
+        console.log(titleSearch);
+        var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q={query}&fq=" + "\"" + titleSearch + "\"" + "&pub_year=" + startYear + "&api-key=WS5iBWT6m0AZ7YebRinv14qp0wn2xgGI";
+        console.log(queryURL);
+        // AJAX is used to GET the data when the button is clicked
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+
+            // After the data is received from the AJAX request, we handle the data
+            .then(function (response) {
+
+                // Saving the location of the image that's returned from the API
+                for (var i = 0; i < numRecords; i++) {
+                    var articleHeadline = response.response.docs[i].headline.main;
+                    var articleStartYear = response.response.docs[i].pub_date;
+                    console.log(articleStartYear);
+                    // Creating a new image element using jquery
+                    var articleTAG = $("<p>");
+
+                    // Setting attributes for the new image element
+                    articleTAG.html(articleHeadline + "(" + articleStartYear + ")");
+
+                    //
+                    $("#top-articles").prepend(articleTAG);
+                }
+            });
+    });
+</script>
+
+</script>
+
+</html>
