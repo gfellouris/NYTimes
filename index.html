@@ -65,7 +65,7 @@
 
         <button id="btnSearch" type="button" class="btn btn-primary"><span
                 class="glyphicon glyphicon-search"></span>Search</button>
-        <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>Clear
+        <button id="btnClear" type="button" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>Clear
             Results</button>
     </div>
 
@@ -76,10 +76,16 @@
 </body>
 
 <script>
+
+    $("#btnClear").on("click", function () {
+        $("#searchTerm").val("");
+        $("#numRecords").val("");
+        $("#startYear").val("");
+        $("#endYear").val("");
+    });
+
     $("#btnSearch").on("click", function () {
 
-        // storing our API URI for a random cat image
-        // var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&tag=dogs";
         var titleSearch = $("#searchTerm").val();
         var numRecords = $("#numRecords").val();
         var startYear = $("#startYear").val();
